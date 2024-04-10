@@ -526,7 +526,7 @@ class MainWindow(AbstractQItem, QMainWindow, QAbstractYAMLObjectSingleton):
         finally:
             loader.dispose()
 
-        if self.settings.color_management:
+        if self.settings.color_management and sys.platform == 'win32':
             assert self.app
             self.current_screen = self.app.primaryScreen()
             self.update_display_profile()
@@ -902,7 +902,7 @@ class MainWindow(AbstractQItem, QMainWindow, QAbstractYAMLObjectSingleton):
             file_resolve_plugin.cleanup()
 
     def moveEvent(self, _move_event: QMoveEvent) -> None:
-        if self.settings.color_management:
+        if self.settings.color_management and sys.platform == 'win32':
             assert self.app
             screen_number = self.app.primaryScreen()
             if self.current_screen != screen_number:

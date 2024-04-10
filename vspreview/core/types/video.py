@@ -477,9 +477,17 @@ class VideoOutput(AbstractYAMLObject):
 
         frame_image = self.frame_to_qimage(vs_frame, False)
 
-        if output_colorspace is not None:
-            frame_image.setColorSpace(QColorSpace(QColorSpace.NamedColorSpace.SRgb))
-            frame_image.convertToColorSpace(output_colorspace)
+        if self.main.settings.color_management:
+            if "ICCProfile" in vs_frame.props:
+                frame_profile = QColorSpace.fromIccProfile(vs_frame.props["ICCProfile"])
+                frame_image.setColorSpace(frame_profile)
+                if output_colorspace is None:
+                    output_colorspace = QColorSpace(QColorSpace.NamedColorSpace.SRgb)
+            elif output_colorspace is not None:
+                frame_image.setColorSpace(QColorSpace(QColorSpace.NamedColorSpace.SRgb))
+
+            if output_colorspace is not None:
+                frame_image.convertToColorSpace(output_colorspace)
 
         if not vs_frame.closed:
             vs_frame.close()

@@ -120,8 +120,7 @@ class MainSettings(AbstractToolbarSettings):
 
         HBoxLayout(self.vlayout, [QLabel('Output Primaries'), self.primaries_combobox])
 
-        if sys.platform == 'win32':
-            HBoxLayout(self.vlayout, [self.color_management_checkbox])
+        HBoxLayout(self.vlayout, [self.color_management_checkbox])
 
     def set_defaults(self) -> None:
         self.autosave_control.setValue(Time(seconds=30))
